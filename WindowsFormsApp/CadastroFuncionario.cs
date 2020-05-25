@@ -8,17 +8,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WindowsFormsApp.Entities;
+using WindowsFormsApp.Exceptions;
+using WindowsFormsApp.Entities.ManipulationFiles;
 
 namespace WindowsFormsApp
 {
-    
+
     public partial class CadastroFuncionario : Form
     {
         ListaFuncionario listaFuncionarios = new ListaFuncionario();
-        
+
         public CadastroFuncionario()
         {
-            InitializeComponent();            
+            InitializeComponent();
         }
 
         private void Label1_Click(object sender, EventArgs e)
@@ -31,39 +34,51 @@ namespace WindowsFormsApp
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             LimparCampos();
-        } 
-                    
+            
+            CarregamentoLv(ManipulationFile.LinesFile());
+        }
+
+        private void CarregamentoLv(List<string> lines)
+        {
+            for (int contador = 0; contador < lines.Count; contador++)
+            {
+                try
+                {
+                    string[] elementos = lines[contador].Split('|');
+
+                    Funcionario funcionario = new Funcionario(elementos[0], elementos[1], elementos[2],
+                    float.Parse(elementos[3]), float.Parse(elementos[4]), float.Parse(elementos[5]));
+
+                    funcionario.CalcularLiquido(float.Parse(elementos[3]), float.Parse(elementos[4]), float.Parse(elementos[5]));
+
+                    ListViewItem item = LvItem.Item(funcionario);
+
+                    listaFuncionarios.ArmazenarFuncionario(funcionario);
+                    lvListaFuncionarios.Items.Add(item);
+                }
+                catch (DomainException err)
+                {
+                    MessageBox.Show(err.Message, "ATENÇÃO", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                }
+            }
+        }
+
         private void LimparCampos()
         {
-            tbNome.Text = "";
+            tbNome.Text = string.Empty;
+            tbCargo.Text = string.Empty;
             tbSalario.Text = "0";
             tbDesconto.Text = "0";
             tbAdicional.Text = "0";
             tbLiquido.Text = "0";
-            tbCPF.Text = "";
+            tbCPF.Text = string.Empty;
+            cbDesconto.Checked = false;
         }
 
-        private bool ValidarCampos()
-        {
-            if (tbNome.Text == "")
-            {
-                MessageBox.Show("Nome Inválido","Atenção");
-                return false;
-            }
-
-            if (tbSalario.Text == "" || tbSalario.Text == "0")
-            {
-                MessageBox.Show("Salário Inválido","Atenção");
-                return false;
-            }
-
-            return true;
-        }
-        
         private void FormatarCampos()
         {
             float valor;
-                
+
             valor = float.Parse(tbSalario.Text);
             tbSalario.Text = valor.ToString("N2");
 
@@ -85,37 +100,38 @@ namespace WindowsFormsApp
                 tbLiquido.Text = Convert.ToString(float.Parse(tbSalario.Text) - float.Parse(tbDesconto.Text) + float.Parse(tbAdicional.Text));
 
         }
+
         private void BtnSalvar_Click(object sender, EventArgs e)
         {
-            if (ValidarCampos())
+            try
             {
-                
                 // metodo ArmazenarFuncionario
                 // responsavel por inserir um novo objeto Funcionario
                 // em uma posição da list
                 listaFuncionarios.ArmazenarFuncionario(tbNome.Text,
-                                                        float.Parse(tbSalario.Text),
-                                                        float.Parse(tbDesconto.Text),
-                                                        float.Parse(tbAdicional.Text),
-                                                        tbCPF.Text,
-                                                        cbDesconto.Checked);
+                                                       tbCPF.Text,
+                                                       tbCargo.Text,
+                                                       float.Parse(tbSalario.Text),
+                                                       float.Parse(tbDesconto.Text),
+                                                       float.Parse(tbAdicional.Text),
+                                                       cbDesconto.Checked);
 
                 // alimento uma "sublista" de item (que é uma linha da list view)
                 // "pegando" os dados  dos textbox 
-                ListViewItem item = new ListViewItem(new[] { tbNome.Text,
-                                                             tbCPF.Text,
-                                                            float.Parse(tbSalario.Text).ToString("N2"),
-                                                            float.Parse(tbDesconto.Text).ToString("N2"),
-                                                            float.Parse(tbAdicional.Text).ToString("N2"),
-                                                            float.Parse(tbLiquido.Text).ToString("N2") });
+                int length = listaFuncionarios.RetornarTamanhoLista() - 1;
+                ListViewItem item = LvItem.Item(listaFuncionarios.RetornaObjetoFuncionario(length));
                 // adicionando o objeto item na listview
                 lvListaFuncionarios.Items.Add(item);
 
                 MessageBox.Show($"Calculou Salário Líquido para o funcionário {tbNome.Text}", "Atenção");
                 LimparCampos();
             }
+            catch (DomainException err)
+            {
+                MessageBox.Show(err.Message, "ATENÇÃO", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
         }
-               
+
         private void LvListaFuncionarios_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -143,27 +159,32 @@ namespace WindowsFormsApp
         {
             CalcularLiquido();
             FormatarCampos();
+            if (cbDesconto.Checked)
+                tbDesconto.Visible = false;
+            else
+                tbDesconto.Visible = true;
+            tbDesconto.Text = "0,00";
         }
-         
+
         // Evento Click do btnExcluir 
         private void BtnExcluir_Click(object sender, EventArgs e)
         {
             // Este for, percorre a lista de itens selecionados na listview
-            for (int itemList = lvListaFuncionarios.SelectedItems.Count - 1; itemList >=0; itemList--)
+            for (int itemList = lvListaFuncionarios.CheckedItems.Count - 1; itemList >= 0; itemList--)
             {
                 // cria um objeto tipo list view item
                 // joga pra esse objeto, a lista de funcionarios selecionados
-                ListViewItem lista = lvListaFuncionarios.SelectedItems[itemList];
+                ListViewItem lista = lvListaFuncionarios.CheckedItems[itemList];
                 // metodo remove = remove uma lista (item) da list view
-                lvListaFuncionarios.Items.Remove(lista); 
+                lvListaFuncionarios.Items.Remove(lista);
 
                 // obtem o text da posição 0 da minha sublista da listview
                 // que é a coluna "nome"
-                string nome = lista.SubItems[0].Text;
+                string cpf = lista.SubItems[1].Text;
 
                 // chamada ao metodo RemoverFuncionario
                 // passando o parametro nome, obtido acima.
-                listaFuncionarios.RemoverFuncionario(nome);
+                listaFuncionarios.RemoverFuncionario(cpf);
             }
         }
 
@@ -182,7 +203,7 @@ namespace WindowsFormsApp
 
             // objeto funcionarioObj "em branco"
             Funcionario funcionarioObj = new Funcionario();
-            
+
             //percorre a list do inicio ao fim
             for (int indice = 0; indice < tamanhoLista; indice++)
             {
@@ -191,17 +212,10 @@ namespace WindowsFormsApp
 
                 // alimento uma "sublista" de item (que é uma linha da list view)
                 // "pegando" os dados direto do funcionarioObj
-                ListViewItem item = new ListViewItem(new[] { funcionarioObj.nome,
-                                                             funcionarioObj.cpf,
-                                                             funcionarioObj.salarioBruto.ToString("N2"),
-                                                             funcionarioObj.desconto.ToString("N2"),
-                                                             funcionarioObj.adicional.ToString("N2"),
-                                                             funcionarioObj.salarioLiquido.ToString("N2") });
+                ListViewItem item = LvItem.Item(funcionarioObj);
                 // adicionando o objeto item na listview
                 lvListaFuncionarios.Items.Add(item);
             }
         }
     }
-
-    
 }

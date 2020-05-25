@@ -19,6 +19,8 @@ namespace WindowsFormsApp
         
         private void CadastroFuncionarioToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            this.Hide();
+
             CadastroFuncionario minhaJanela = new CadastroFuncionario();
             minhaJanela.ShowDialog();
         }
@@ -28,5 +30,12 @@ namespace WindowsFormsApp
             Application.Exit();
         }
 
-     }
+        private void agendaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+
+            Agenda minhaJanela = new Agenda();
+            minhaJanela.ShowDialog();
+        }
+    }
 }

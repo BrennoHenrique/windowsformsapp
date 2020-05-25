@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CadastroFuncionario));
             this.labelNome = new System.Windows.Forms.Label();
             this.labelSalario = new System.Windows.Forms.Label();
             this.labelDesc = new System.Windows.Forms.Label();
@@ -42,6 +43,8 @@
             this.cbDesconto = new System.Windows.Forms.CheckBox();
             this.lvListaFuncionarios = new System.Windows.Forms.ListView();
             this.Nome = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Cpf = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Cargo = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SalarioBruto = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Desconto = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.Adicional = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -49,14 +52,15 @@
             this.btnExcluir = new System.Windows.Forms.Button();
             this.tbCPF = new System.Windows.Forms.MaskedTextBox();
             this.labelCPF = new System.Windows.Forms.Label();
-            this.Cpf = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.btnOrdenar = new System.Windows.Forms.Button();
+            this.tbCargo = new System.Windows.Forms.ComboBox();
+            this.labelCargo = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // labelNome
             // 
             this.labelNome.AutoSize = true;
-            this.labelNome.Location = new System.Drawing.Point(41, 21);
+            this.labelNome.Location = new System.Drawing.Point(41, 16);
             this.labelNome.Name = "labelNome";
             this.labelNome.Size = new System.Drawing.Size(38, 13);
             this.labelNome.TabIndex = 0;
@@ -65,7 +69,7 @@
             // labelSalario
             // 
             this.labelSalario.AutoSize = true;
-            this.labelSalario.Location = new System.Drawing.Point(37, 71);
+            this.labelSalario.Location = new System.Drawing.Point(37, 96);
             this.labelSalario.Name = "labelSalario";
             this.labelSalario.Size = new System.Drawing.Size(42, 13);
             this.labelSalario.TabIndex = 1;
@@ -74,7 +78,7 @@
             // labelDesc
             // 
             this.labelDesc.AutoSize = true;
-            this.labelDesc.Location = new System.Drawing.Point(23, 98);
+            this.labelDesc.Location = new System.Drawing.Point(23, 122);
             this.labelDesc.Name = "labelDesc";
             this.labelDesc.Size = new System.Drawing.Size(56, 13);
             this.labelDesc.TabIndex = 2;
@@ -83,7 +87,7 @@
             // labelAdicional
             // 
             this.labelAdicional.AutoSize = true;
-            this.labelAdicional.Location = new System.Drawing.Point(25, 124);
+            this.labelAdicional.Location = new System.Drawing.Point(26, 148);
             this.labelAdicional.Name = "labelAdicional";
             this.labelAdicional.Size = new System.Drawing.Size(53, 13);
             this.labelAdicional.TabIndex = 3;
@@ -92,7 +96,7 @@
             // labelLiq
             // 
             this.labelLiq.AutoSize = true;
-            this.labelLiq.Location = new System.Drawing.Point(337, 118);
+            this.labelLiq.Location = new System.Drawing.Point(337, 116);
             this.labelLiq.Name = "labelLiq";
             this.labelLiq.Size = new System.Drawing.Size(46, 13);
             this.labelLiq.TabIndex = 4;
@@ -117,7 +121,7 @@
             // 
             // tbSalario
             // 
-            this.tbSalario.Location = new System.Drawing.Point(85, 66);
+            this.tbSalario.Location = new System.Drawing.Point(85, 93);
             this.tbSalario.Name = "tbSalario";
             this.tbSalario.Size = new System.Drawing.Size(100, 20);
             this.tbSalario.TabIndex = 7;
@@ -126,7 +130,7 @@
             // 
             // tbDesconto
             // 
-            this.tbDesconto.Location = new System.Drawing.Point(85, 92);
+            this.tbDesconto.Location = new System.Drawing.Point(85, 119);
             this.tbDesconto.Name = "tbDesconto";
             this.tbDesconto.Size = new System.Drawing.Size(100, 20);
             this.tbDesconto.TabIndex = 8;
@@ -135,7 +139,7 @@
             // 
             // tbAdicional
             // 
-            this.tbAdicional.Location = new System.Drawing.Point(85, 115);
+            this.tbAdicional.Location = new System.Drawing.Point(85, 145);
             this.tbAdicional.Name = "tbAdicional";
             this.tbAdicional.Size = new System.Drawing.Size(100, 20);
             this.tbAdicional.TabIndex = 9;
@@ -144,16 +148,17 @@
             // 
             // tbLiquido
             // 
+            this.tbLiquido.Enabled = false;
             this.tbLiquido.Location = new System.Drawing.Point(389, 113);
             this.tbLiquido.Name = "tbLiquido";
             this.tbLiquido.Size = new System.Drawing.Size(100, 20);
             this.tbLiquido.TabIndex = 10;
-            this.tbLiquido.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tbLiquido.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // cbDesconto
             // 
             this.cbDesconto.AutoSize = true;
-            this.cbDesconto.Location = new System.Drawing.Point(192, 94);
+            this.cbDesconto.Location = new System.Drawing.Point(191, 121);
             this.cbDesconto.Name = "cbDesconto";
             this.cbDesconto.Size = new System.Drawing.Size(96, 17);
             this.cbDesconto.TabIndex = 11;
@@ -163,9 +168,11 @@
             // 
             // lvListaFuncionarios
             // 
+            this.lvListaFuncionarios.CheckBoxes = true;
             this.lvListaFuncionarios.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.Nome,
             this.Cpf,
+            this.Cargo,
             this.SalarioBruto,
             this.Desconto,
             this.Adicional,
@@ -173,10 +180,10 @@
             this.lvListaFuncionarios.FullRowSelect = true;
             this.lvListaFuncionarios.GridLines = true;
             this.lvListaFuncionarios.HideSelection = false;
-            this.lvListaFuncionarios.Location = new System.Drawing.Point(30, 238);
+            this.lvListaFuncionarios.Location = new System.Drawing.Point(12, 238);
             this.lvListaFuncionarios.MultiSelect = false;
             this.lvListaFuncionarios.Name = "lvListaFuncionarios";
-            this.lvListaFuncionarios.Size = new System.Drawing.Size(463, 97);
+            this.lvListaFuncionarios.Size = new System.Drawing.Size(580, 97);
             this.lvListaFuncionarios.TabIndex = 13;
             this.lvListaFuncionarios.UseCompatibleStateImageBehavior = false;
             this.lvListaFuncionarios.View = System.Windows.Forms.View.Details;
@@ -185,7 +192,17 @@
             // Nome
             // 
             this.Nome.Text = "Nome";
-            this.Nome.Width = 79;
+            this.Nome.Width = 131;
+            // 
+            // Cpf
+            // 
+            this.Cpf.Text = "CPF";
+            this.Cpf.Width = 95;
+            // 
+            // Cargo
+            // 
+            this.Cargo.Text = "Cargo";
+            this.Cargo.Width = 72;
             // 
             // SalarioBruto
             // 
@@ -224,23 +241,19 @@
             this.tbCPF.Location = new System.Drawing.Point(85, 40);
             this.tbCPF.Mask = "000.000.000-00";
             this.tbCPF.Name = "tbCPF";
+            this.tbCPF.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.tbCPF.Size = new System.Drawing.Size(100, 20);
             this.tbCPF.TabIndex = 7;
-            this.tbCPF.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.tbCPF.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // labelCPF
             // 
             this.labelCPF.AutoSize = true;
-            this.labelCPF.Location = new System.Drawing.Point(41, 43);
+            this.labelCPF.Location = new System.Drawing.Point(49, 43);
             this.labelCPF.Name = "labelCPF";
             this.labelCPF.Size = new System.Drawing.Size(30, 13);
             this.labelCPF.TabIndex = 16;
             this.labelCPF.Text = "CPF:";
-            // 
-            // Cpf
-            // 
-            this.Cpf.Text = "CPF";
-            this.Cpf.Width = 95;
             // 
             // btnOrdenar
             // 
@@ -253,12 +266,33 @@
             this.btnOrdenar.UseVisualStyleBackColor = true;
             this.btnOrdenar.Click += new System.EventHandler(this.BtnOrdenar_Click);
             // 
+            // tbCargo
+            // 
+            this.tbCargo.Items.AddRange(new object[] {
+            "Gerente",
+            "Funcionario"});
+            this.tbCargo.Location = new System.Drawing.Point(85, 66);
+            this.tbCargo.Name = "tbCargo";
+            this.tbCargo.Size = new System.Drawing.Size(100, 21);
+            this.tbCargo.TabIndex = 18;
+            // 
+            // labelCargo
+            // 
+            this.labelCargo.AutoSize = true;
+            this.labelCargo.Location = new System.Drawing.Point(49, 69);
+            this.labelCargo.Name = "labelCargo";
+            this.labelCargo.Size = new System.Drawing.Size(35, 13);
+            this.labelCargo.TabIndex = 19;
+            this.labelCargo.Text = "Cargo";
+            // 
             // CadastroFuncionario
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(505, 369);
+            this.ClientSize = new System.Drawing.Size(604, 369);
+            this.Controls.Add(this.labelCargo);
+            this.Controls.Add(this.tbCargo);
             this.Controls.Add(this.btnOrdenar);
             this.Controls.Add(this.labelCPF);
             this.Controls.Add(this.tbCPF);
@@ -277,6 +311,7 @@
             this.Controls.Add(this.labelSalario);
             this.Controls.Add(this.labelNome);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "CadastroFuncionario";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Cadastro de Funcionário";
@@ -311,6 +346,9 @@
         private System.Windows.Forms.Label labelCPF;
         private System.Windows.Forms.ColumnHeader Cpf;
         private System.Windows.Forms.Button btnOrdenar;
+        private System.Windows.Forms.ComboBox tbCargo;
+        private System.Windows.Forms.Label labelCargo;
+        private System.Windows.Forms.ColumnHeader Cargo;
     }
 }
 
