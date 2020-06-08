@@ -53,21 +53,30 @@
     <Compile Include="Agenda.Designer.cs">
       <DependentUpon>Agenda.cs</DependentUpon>
     </Compile>
+    <Compile Include="DBFuncionarioDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DBFuncionarioDataSet.xsd</DependentUpon>
+    </Compile>
     <Compile Include="EntitiesAgenda\AgendaEntitie.cs" />
+    <Compile Include="EntitiesAgenda\ManipulationDB\Conexao.cs" />
+    <Compile Include="EntitiesAgenda\ManipulationDB\Controle.cs" />
     <Compile Include="EntitiesAgenda\Pessoa.cs" />
-    <Compile Include="EntitiesCadastroFuncionario\Checkeds\CheckCPF.cs" />
+    <Compile Include="EntitiesCadFuncionario\Checkeds\CheckCPF.cs" />
+    <Compile Include="EntitiesCadFuncionario\ManipulationDB\Cadastro.cs" />
+    <Compile Include="EntitiesCadFuncionario\ManipulationDB\Conexao.cs" />
+    <Compile Include="EntitiesCadFuncionario\ManipulationDB\Controle.cs" />
     <Compile Include="Exceptions\DomainException.cs" />
-    <Compile Include="EntitiesCadastroFuncionario\Gerente.cs" />
-    <Compile Include="EntitiesCadastroFuncionario\LvItem.cs" />
-    <Compile Include="EntitiesCadastroFuncionario\ManipulationFiles\ManipulationFile.cs" />
-    <Compile Include="EntitiesCadastroFuncionario\ListaFuncionario.cs" />
+    <Compile Include="EntitiesCadFuncionario\Gerente.cs" />
+    <Compile Include="EntitiesCadFuncionario\LvItem.cs" />
+    <Compile Include="EntitiesCadFuncionario\ListaFuncionario.cs" />
     <Compile Include="Principal.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Principal.Designer.cs">
       <DependentUpon>Principal.cs</DependentUpon>
     </Compile>
-    <Compile Include="EntitiesCadastroFuncionario\Funcionario.cs" />
+    <Compile Include="EntitiesCadFuncionario\Funcionario.cs" />
     <Compile Include="CadastroFuncionario.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -94,6 +103,17 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="DBFuncionarioDataSet.xsc">
+      <DependentUpon>DBFuncionarioDataSet.xsd</DependentUpon>
+    </None>
+    <None Include="DBFuncionarioDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DBFuncionarioDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DBFuncionarioDataSet.xss">
+      <DependentUpon>DBFuncionarioDataSet.xsd</DependentUpon>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -106,9 +126,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="DATABASE\data.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -8,9 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using WindowsFormsApp.Entities;
 using WindowsFormsApp.Exceptions;
-using WindowsFormsApp.Entities.ManipulationFiles;
+using WindowsFormsApp.EntitiesCadFuncionario;
+using WindowsFormsApp.EntitiesCadFuncionario.ManipulationDB;
 
 namespace WindowsFormsApp
 {
@@ -34,32 +34,14 @@ namespace WindowsFormsApp
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             LimparCampos();
-            
-            CarregamentoLv(ManipulationFile.LinesFile());
-        }
 
-        private void CarregamentoLv(List<string> lines)
-        {
-            for (int contador = 0; contador < lines.Count; contador++)
+            Controle controle = new Controle();
+            List<Funcionario> funcionariosList = controle.SelectAllFuncionarios();
+
+            for (int indice = 0; indice < funcionariosList.Count; indice++)
             {
-                try
-                {
-                    string[] elementos = lines[contador].Split('|');
-
-                    Funcionario funcionario = new Funcionario(elementos[0], elementos[1], elementos[2],
-                    float.Parse(elementos[3]), float.Parse(elementos[4]), float.Parse(elementos[5]));
-
-                    funcionario.CalcularLiquido(float.Parse(elementos[3]), float.Parse(elementos[4]), float.Parse(elementos[5]));
-
-                    ListViewItem item = LvItem.Item(funcionario);
-
-                    listaFuncionarios.ArmazenarFuncionario(funcionario);
-                    lvListaFuncionarios.Items.Add(item);
-                }
-                catch (DomainException err)
-                {
-                    MessageBox.Show(err.Message, "ATENÇÃO", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                }
+                listaFuncionarios.ArmazenarFuncionario(funcionariosList[indice]);
+                lvListaFuncionarios.Items.Add(LvItem.Item(funcionariosList[indice]));
             }
         }
 
@@ -181,6 +163,9 @@ namespace WindowsFormsApp
                 // obtem o text da posição 0 da minha sublista da listview
                 // que é a coluna "nome"
                 string cpf = lista.SubItems[1].Text;
+
+                Controle controle = new Controle();
+                controle.DeleteFuncionario(cpf);
 
                 // chamada ao metodo RemoverFuncionario
                 // passando o parametro nome, obtido acima.

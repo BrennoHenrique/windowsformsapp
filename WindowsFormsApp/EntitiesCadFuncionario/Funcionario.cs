@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WindowsFormsApp.Exceptions;
 
-namespace WindowsFormsApp.Entities
+namespace WindowsFormsApp.EntitiesCadFuncionario
 {
     public class Funcionario
     {

@@ -10,12 +10,14 @@ using System.Threading;
 using System.Windows.Forms;
 using WindowsFormsApp.Exceptions;
 using WindowsFormsApp.EntitiesAgenda;
+using WindowsFormsApp.EntitiesAgenda.ManipulationDB;
 
 namespace WindowsFormsApp
 {
     public partial class Agenda : Form
     {
         private AgendaEntitie agenda = new AgendaEntitie();
+
         public Agenda()
         {
             InitializeComponent();
@@ -24,6 +26,31 @@ namespace WindowsFormsApp
         private void Agenda_Load(object sender, EventArgs e)
         {
             RedimensionaColuna();
+            Controle Controle = new Controle();
+
+            try
+            {
+                List<Pessoa> Pessoas = Controle.LoadForms();
+
+                for (int contador = 0; contador < Pessoas.Count; contador++)
+                {
+                    agenda.AddPessoa(Pessoas[contador]);
+
+                    ListViewItem item = new ListViewItem(new[] {Pessoas[contador].Nome, Pessoas[contador].Endereco,
+                                                            Pessoas[contador].Telefone, Pessoas[contador].Email});
+
+                    lvAgenda.Items.Add(item);
+                }
+            }
+            catch (DomainException err)
+            {
+                MessageBox.Show(err.Message, "ATENÇÃO", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Dados informados pelo banco de dados incorretamente!\n" +
+                                "Para iniciar o programa corretamente, é necessário que faça o acesso ao banco de dados e corrija os erros dos cadastros.\n" +
+                                "O programa será encerrado!", "ATENÇÃO", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+                Application.Exit();
+            }
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -31,16 +58,22 @@ namespace WindowsFormsApp
 
         }
 
-        private void btnNovo_Click(object sender, EventArgs e)
+        private void LimparCampos()
         {
             boxNome.Text = string.Empty;
             boxEndereco.Text = string.Empty;
             boxTelefone.Text = string.Empty;
             boxEmail.Text = string.Empty;
         }
+        private void btnNovo_Click(object sender, EventArgs e)
+        {
+            LimparCampos();
+        }
 
         private void btnSalvar_Click(object sender, EventArgs e)
         {
+            Controle Controle = new Controle();
+
             try
             {
                 if (!SalvaComEditar())
@@ -48,20 +81,46 @@ namespace WindowsFormsApp
                     ListViewItem item = new ListViewItem(new[] { boxNome.Text, boxEndereco.Text,
                                                                  boxTelefone.Text, boxEmail.Text});
 
-                    this.agenda.AddPessoa(boxNome.Text, boxEndereco.Text, boxTelefone.Text, boxEmail.Text);
+                    Pessoa pessoa = new Pessoa(boxNome.Text, boxEndereco.Text,
+                                               boxTelefone.Text, boxEmail.Text);
 
-                    lvAgenda.Items.Add(item);
+                    Controle.InsertInAgenda(boxNome.Text, boxEndereco.Text,
+                                            boxTelefone.Text, boxEmail.Text);
+
+                    if (Controle.Menssagem.Equals(""))
+                    {
+                        this.agenda.AddPessoa(pessoa);
+                        lvAgenda.Items.Add(item);
+                    }
+                    else
+                    {
+                        MessageBox.Show(Controle.Menssagem);
+                    }
+                    LimparCampos();
                 }
                 else
                 {
                     Pessoa pessoa = new Pessoa(boxNome.Text, boxEndereco.Text, boxTelefone.Text, boxEmail.Text);
 
-                    lvAgenda.SelectedItems[0].SubItems[0].Text = pessoa.Nome;
-                    lvAgenda.SelectedItems[0].SubItems[1].Text = pessoa.Endereco;
-                    lvAgenda.SelectedItems[0].SubItems[2].Text = pessoa.Telefone;
-                    lvAgenda.SelectedItems[0].SubItems[3].Text = pessoa.Email;
+                    Controle.UpdateInAgenda(lvAgenda.SelectedItems[0].SubItems[0].Text,
+                                            lvAgenda.SelectedItems[0].SubItems[1].Text,
+                                            lvAgenda.SelectedItems[0].SubItems[2].Text,
+                                            lvAgenda.SelectedItems[0].SubItems[3].Text, pessoa);
 
-                    agenda.EditarPessoa(pessoa, lvAgenda.Items.IndexOf(lvAgenda.SelectedItems[0]));
+                    if (Controle.Menssagem.Equals(""))
+                    {
+                        lvAgenda.SelectedItems[0].SubItems[0].Text = pessoa.Nome;
+                        lvAgenda.SelectedItems[0].SubItems[1].Text = pessoa.Endereco;
+                        lvAgenda.SelectedItems[0].SubItems[2].Text = pessoa.Telefone;
+                        lvAgenda.SelectedItems[0].SubItems[3].Text = pessoa.Email;
+
+                        agenda.EditarPessoa(pessoa, lvAgenda.Items.IndexOf(lvAgenda.SelectedItems[0]));
+                    }
+                    else
+                    {
+                        MessageBox.Show(Controle.Menssagem);
+                    }
+                    LimparCampos();
                 }
             }
             catch (DomainException err)
@@ -118,18 +177,30 @@ namespace WindowsFormsApp
 
         private void btnExcluir_Click(object sender, EventArgs e)
         {
+            Controle Controle = new Controle();
+
             if (lvAgenda.SelectedItems.Count > 0)
             {
                 ListViewItem item = lvAgenda.SelectedItems[0];
 
-                int index = lvAgenda.Items.IndexOf(item);
+                Controle.DeleteInAgenda(item.SubItems[0].Text, item.SubItems[1].Text, item.SubItems[2].Text,
+                                        item.SubItems[3].Text);
 
-                lvAgenda.SelectedItems[0].SubItems.Clear();
-                agenda.ExcluirPessoa(index);
+                if (Controle.Menssagem.Equals(""))
+                {
+                    int index = lvAgenda.Items.IndexOf(item);
 
-                lvAgenda.SelectedItems[0].Selected = false;
+                    lvAgenda.SelectedItems[0].SubItems.Clear();
+                    agenda.ExcluirPessoa(index);
 
-                lvAgenda_ColumnClick(sender, new ColumnClickEventArgs(0));
+                    lvAgenda.SelectedItems[0].Selected = false;
+
+                    lvAgenda_ColumnClick(sender, new ColumnClickEventArgs(0));
+                }
+                else
+                {
+                    MessageBox.Show(Controle.Menssagem);
+                }
             }
         }
 

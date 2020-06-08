@@ -4,9 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WindowsFormsApp.Exceptions;
-using WindowsFormsApp.Entities.ManipulationFiles;
 
-namespace WindowsFormsApp.Entities.Checkeds
+namespace WindowsFormsApp.EntitiesCadFuncionario.Checkeds
 {
     class CheckCPF
     {

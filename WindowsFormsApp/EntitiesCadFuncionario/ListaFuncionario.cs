@@ -3,9 +3,9 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using WindowsFormsApp.Entities;
-using WindowsFormsApp.Entities.Checkeds;
-using WindowsFormsApp.Entities.ManipulationFiles;
+using WindowsFormsApp.EntitiesCadFuncionario;
+using WindowsFormsApp.EntitiesCadFuncionario.Checkeds;
+using WindowsFormsApp.EntitiesCadFuncionario.ManipulationDB;
 
 namespace WindowsFormsApp
 {
@@ -24,10 +24,10 @@ namespace WindowsFormsApp
 
             CheckCPF.Check(this.Funcionarios, cpf);
             // Cada item (indice) da lista é um objeto Funcionario que contem nome, cpf, salario, desconto
-            if (cargo == "Funcionario")
-                funcionarioObj = new Funcionario(nome, cpf, cargo, salario, desconto, adicional);
-            else
+            if (cargo == "Gerente")
                 funcionarioObj = new Gerente(nome, cpf, cargo, salario, desconto, adicional);
+            else
+                funcionarioObj = new Funcionario(nome, cpf, cargo, salario, desconto, adicional);
 
             // dependendo do valor da variavel semDesconto
             // executa versões diferentes da CalcularLiquido (conceito de sobrecarga)
@@ -40,7 +40,8 @@ namespace WindowsFormsApp
 
             // Função add é herdada da list
             Funcionarios.Add(funcionarioObj);
-            ManipulationFile.AddInFile(funcionarioObj);
+            Cadastro cadastro = new Cadastro(funcionarioObj.nome, funcionarioObj.cpf, funcionarioObj.Cargo, funcionarioObj.salarioBruto,
+                                             funcionarioObj.desconto, funcionarioObj.adicional);
         }
 
         //Sabrecarga utilizada no load do forms cadastro de funcionáios.
@@ -55,7 +56,6 @@ namespace WindowsFormsApp
             // Função removeall é herdada da list
             Funcionarios.RemoveAll(f => f.cpf == cpf); // a expressão lambda é uma representação :
                                                        // (input-parameters) => expression
-            ManipulationFile.RemoveInFile(cpf);
         }
 
         public int BuscarFuncionario(String nome)

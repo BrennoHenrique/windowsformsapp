@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WindowsFormsApp.Entities
+namespace WindowsFormsApp.EntitiesCadFuncionario
 {
     class LvItem
     {

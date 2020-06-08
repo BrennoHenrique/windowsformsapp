@@ -180,10 +180,11 @@
             this.lvListaFuncionarios.FullRowSelect = true;
             this.lvListaFuncionarios.GridLines = true;
             this.lvListaFuncionarios.HideSelection = false;
-            this.lvListaFuncionarios.Location = new System.Drawing.Point(12, 238);
+            this.lvListaFuncionarios.Location = new System.Drawing.Point(-2, 230);
+            this.lvListaFuncionarios.Margin = new System.Windows.Forms.Padding(1);
             this.lvListaFuncionarios.MultiSelect = false;
             this.lvListaFuncionarios.Name = "lvListaFuncionarios";
-            this.lvListaFuncionarios.Size = new System.Drawing.Size(580, 97);
+            this.lvListaFuncionarios.Size = new System.Drawing.Size(618, 97);
             this.lvListaFuncionarios.TabIndex = 13;
             this.lvListaFuncionarios.UseCompatibleStateImageBehavior = false;
             this.lvListaFuncionarios.View = System.Windows.Forms.View.Details;
@@ -268,6 +269,7 @@
             // 
             // tbCargo
             // 
+            this.tbCargo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.tbCargo.Items.AddRange(new object[] {
             "Gerente",
             "Funcionario"});
@@ -290,7 +292,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.ClientSize = new System.Drawing.Size(604, 369);
+            this.ClientSize = new System.Drawing.Size(616, 369);
             this.Controls.Add(this.labelCargo);
             this.Controls.Add(this.tbCargo);
             this.Controls.Add(this.btnOrdenar);

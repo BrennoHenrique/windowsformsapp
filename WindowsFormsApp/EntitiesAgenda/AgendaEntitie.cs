@@ -12,9 +12,8 @@ namespace WindowsFormsApp.EntitiesAgenda
         private bool ListOrder { get; set; } = false;
         private List<Pessoa> Pessoas { get; set; } = new List<Pessoa>();
 
-        public void AddPessoa(string nome, string endereco, string telefone, string email)
+        public void AddPessoa(Pessoa pessoa)
         {
-            Pessoa pessoa = new Pessoa(nome, endereco, telefone, email);
             this.Pessoas.Add(pessoa);
         }
 
@@ -40,14 +39,8 @@ namespace WindowsFormsApp.EntitiesAgenda
             }
             else
             {
-                this.Pessoas = this.Pessoas.OrderBy(item => item.Nome).ToList();
+                this.Pessoas = this.Pessoas.OrderByDescending(item => item.Nome).ToList();
 
-                for (int indiceMaior = this.Pessoas.Count - 1, indiceMenor = 0; indiceMenor < this.Pessoas.Count / 2; indiceMaior--, indiceMenor++)
-                {
-                    var aux = this.Pessoas[indiceMenor];
-                    this.Pessoas[indiceMenor] = this.Pessoas[indiceMaior];
-                    this.Pessoas[indiceMaior] = aux;
-                }
                 this.ListOrder = false;
             }
         }
